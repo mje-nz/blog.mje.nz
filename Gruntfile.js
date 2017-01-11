@@ -248,7 +248,42 @@ module.exports = function (grunt) {
     'htmlmin'
     ]);
 
+  grunt.registerTask('checkenv', function () {
+    // Sanity checks to minimise deployment surprises
+
+    if (process.env.TRAVIS) {
+      // Don't care
+      return;
+    }
+
+    const exec_raw = require('child_process').execSync,
+          exec = function (cmd) {return exec_raw(cmd, {'encoding': 'utf8'}).trim()},
+          current_branch = exec('git rev-parse --abbrev-ref HEAD'),
+          current_repo = exec('git remote get-url origin'),
+          buildcontrol_remote = grunt.config.get('buildcontrol.dist.options.remote'),
+          unpushed_commits_list = exec('git cherry');
+
+    if (current_branch != 'source') {
+     console.log(current_branch);
+     grunt.log.error('Deploy error: Not on source branch (on ' + current_branch.trim() + ' instead)');
+     return false;
+    }
+
+    if (current_repo != buildcontrol_remote) {
+      grunt.log.error('Deploy error: This repo\'s origin remote is ' + current_repo + ', buildcontrol is pushing to ' + buildcontrol_remote);
+      return false;
+    }
+
+    if (unpushed_commits_list != '') {
+      const unpushed_commits_count = unpushed_commits_list.split(/\r\n|\r|\n/).length;
+      grunt.log.error('Deploy error: ' + unpushed_commits_count + ' unpushed commits');
+      return false;
+    }
+
+  });
+
   grunt.registerTask('deploy', [
+    'checkenv',
     //'check',
     //'test',
     'build',
