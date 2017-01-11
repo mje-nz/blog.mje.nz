@@ -182,8 +182,8 @@ module.exports = function (grunt) {
     buildcontrol: {
       dist: {
         options: {
-          remote: 'git@github.com:mje-nz/mje-nz.github.io.git',
-          branch: 'master',
+          remote: 'git@github.com:mje-nz/blog.mje.nz.git',
+          branch: 'gh-pages',
           commit: true,
           push: true,
           connectCommits: false
@@ -263,9 +263,9 @@ module.exports = function (grunt) {
           buildcontrol_remote = grunt.config.get('buildcontrol.dist.options.remote'),
           unpushed_commits_list = exec('git cherry');
 
-    if (current_branch != 'source') {
+    if (current_branch != 'master') {
      console.log(current_branch);
-     grunt.log.error('Deploy error: Not on source branch (on ' + current_branch.trim() + ' instead)');
+     grunt.log.error('Deploy error: Not on master branch (on ' + current_branch.trim() + ' instead)');
      return false;
     }
 

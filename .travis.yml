@@ -24,7 +24,3 @@ before_script:
 
 script:
   - grunt deploy
-
-branches:
-  only:
-    - source
