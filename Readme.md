@@ -1,7 +1,10 @@
-# Blog source [![Build Status](https://travis-ci.org/mje-nz/blog.mje.nz.svg?branch=source)](https://travis-ci.org/mje-nz/blog.mje.nz)
+# Blog source [![Build Status](https://travis-ci.org/mje-nz/blog.mje.nz.svg?branch=master)](https://travis-ci.org/mje-nz/blog.mje.nz)
 
 TODO:
 * Subset Font Awesome
-* Use Jekyll Picture for hero images
+* Use Jekyll Picture Tag for hero images, cache generated images
 * Tweak visual style
+* Run linters, check links etc on builds
+* 404 page
+* Contact page?
 
