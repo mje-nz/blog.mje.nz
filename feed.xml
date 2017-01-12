@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-01-12T16:19:39+13:00</updated><id>//</id><title type="html">mje.nz</title><subtitle></subtitle><author><name>Matthew Edwards</name></author><entry><title type="html">RFM69 frequency bands in New Zealand</title><link href="/rfm69-frequency-bands-in-new-zealand/" rel="alternate" type="text/html" title="RFM69 frequency bands in New Zealand" /><published>2016-12-27T00:00:00+13:00</published><updated>2016-12-27T00:00:00+13:00</updated><id>/rfm69-frequency-bands-in-new-zealand</id><content type="html" xml:base="/rfm69-frequency-bands-in-new-zealand/">&lt;p&gt;The RFM69 series from HopeRF look like a good alternative to the Nordic radios.
+They have modules available for 315 MHz, 433 MHz, 898 MHz and 915 MHz.
+Different countries have different restrictions on each of these bands however, so here is the situation in New Zealand &lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;315mhz&quot;&gt;315 MHz&lt;/h3&gt;
+&lt;p&gt;The 315 MHz module has a range of 290-340 MHz. Transmitting anywhere in that range in NZ requires a (paid) license from RSM.&lt;/p&gt;
+
+&lt;h3 id=&quot;433mhz&quot;&gt;433 MHz&lt;/h3&gt;
+&lt;p&gt;The 433 MHz module has a range of 424-510 MHz.
+Most of this range requires a license, but there are a few narrow bands that can be used freely:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;433.05-434.79 MHz is limited to 14 dBm EIRP&lt;/li&gt;
+  &lt;li&gt;458.54-458.61 MHz is limited to 27 dBm EIRP&lt;/li&gt;
+  &lt;li&gt;466.8-466.85 MHz is limited to 27 dBm EIRP&lt;/li&gt;
+  &lt;li&gt;471-471.5 MHz is limited to 20 dBm EIRP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;898mhz&quot;&gt;898 MHz&lt;/h3&gt;
+&lt;p&gt;The 898 MHz module has a range of 862-890 MHz.
+864-868 MHz is limited to 30 dBm EIRP (or 36 dBm if frequency hopping is used), the rest requires a license.&lt;/p&gt;
+
+&lt;h3 id=&quot;915mhz&quot;&gt;915 MHz&lt;/h3&gt;
+&lt;p&gt;The 915 MHz module has a range of 890-1020 MHz.
+915-928 MHz is limited to 30 dBm EIRP (920-928 MHz is limited to 36 dBm with frequency hopping), the rest requires a license.
+This module makes the most sense in NZ as it has by far the most spectrum available.&lt;/p&gt;
+
+&lt;h2 id=&quot;spurious-emissions&quot;&gt;Spurious emissions&lt;/h2&gt;
+&lt;p&gt;Generally in NZ the limit for spurious emissions is -26 dBm peak EIRP (59 dBμV/m at 10 m) &lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+Additionally, the 800-915 MHz band has a limit of -49 dBm and the 928-1000 MHz band has a limit of -33 dBm.&lt;/p&gt;
+
+&lt;p&gt;Compliance outside 800-1000 MHz can be determined from the &lt;a href=&quot;http://www.hoperf.com/upload/docs/report/RFM69CW-915S2-FCC.pdf&quot;&gt;FCC compliance test report available from HopeRF&lt;/a&gt;, if we assume that it’s accurate.
+Below 800 MHz the highest value is about 30 dBμV/m at 3 m, which corresponds to about 20 dBμV/m at 10 m assuming the test was performed properly&lt;sup id=&quot;fnref:3&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+Above 1 GHz there is a single peak of 55.19 dBμV/m at 3 m at the first harmonic (around 1830 MHz) &lt;sup id=&quot;fnref:4&quot;&gt;&lt;a href=&quot;#fn:4&quot; class=&quot;footnote&quot;&gt;4&lt;/a&gt;&lt;/sup&gt;.
+That corresponds to 44.73 dBμV/m at 10 m, which is 14.27 dB below the NZ limit.
+However, in the FCC test the module was running at the 0dBm power setting, which suggests that at a power setting of 14.27 dBm it would reach the NZ limit at the first harmonic.
+Since that frequency is used for cell tower transmissions in NZ, running an RFM69HW (the high-power variant) at full power &lt;em&gt;might&lt;/em&gt; affect cellphone reception.
+It could still make sense to use an RFM69HW though, since &lt;a href=&quot;https://www.andrehessling.de/2015/02/07/figuring-out-the-power-level-settings-of-hoperfs-rfm69-hwhcw-modules/&quot;&gt;some users&lt;/a&gt; have found it to be slightly more efficient than the RFM69W.&lt;/p&gt;
+
+&lt;p&gt;Compliance within the 8800-1000 MHz band is a bit tricky though; there don’t appear to be any test results available for the RFM69 modules that show the spectrum around the carrier frequency.
+The datasheet says the adjacent channel power is -37 dBm at 25 kHz offset but doesn’t give any more detail than that, so it would be best to stay within 917-926 MHz or so to be safe.&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;As specified in the &lt;a href=&quot;https://gazette.govt.nz/notice/id/2016-go6047&quot;&gt;Radiocommunications Regulations (General User Radio Licence for Short Range Devices) Notice 2016 No. 2&lt;/a&gt;.&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;See Table 2 of the &lt;a href=&quot;https://www.gazette.govt.nz/notice/id/2016-go2007&quot;&gt;Radiocommunications Regulations (Radio Standards) Notice 2016&lt;/a&gt;.&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot;&gt;
+      &lt;p&gt;See &lt;a href=&quot;https://www.eeweb.com/electronics-quiz/radiated-emission-measurements-conversion&quot;&gt;here&lt;/a&gt;.&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:4&quot;&gt;
+      &lt;p&gt;For some reason the peak is at a different frequency depending on the polarisation; that doesn’t really matter in this context though.&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name>Matthew Edwards</name></author><summary type="html">The RFM69 series from HopeRF look like a good alternative to the Nordic radios.
+They have modules available for 315 MHz, 433 MHz, 898 MHz and 915 MHz.
+Different countries have different restrictions on each of these bands however, so here is the situation in New Zealand 1.
+
+
+  
+    
+      As specified in the Radiocommunications Regulations (General User Radio Licence for Short Range Devices) Notice 2016 No. 2.&amp;nbsp;&amp;#8617;</summary></entry></feed>
