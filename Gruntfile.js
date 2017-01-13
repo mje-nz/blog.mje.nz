@@ -223,7 +223,18 @@ module.exports = function (grunt) {
           connectCommits: false
         }
       }
-    }
+    },
+
+    cloudflare_purge: {
+      dist: {
+        options: {
+          // Options stored in Travis environment variables
+          apiKey: process.env.CLOUDFLARE_API_KEY,
+          email: process.env.CLOUDFLARE_EMAIL,
+          zone: process.env.CLOUDFLARE_ZONE
+        },
+      },
+  },
   });
 
   // Define Tasks
@@ -299,8 +310,12 @@ module.exports = function (grunt) {
     'checkenv',
     //'check',
     'build',
-    'buildcontrol'  // Push
-    ]);
+    'buildcontrol',  // Push
+  ]);
+
+  // Run cloudflare_purge separately to avoid printing out its options and
+  // leaking my CloudFlare API key
+  grunt.registerTask('purge_cloudflare_cache', ['cloudflare_purge']);
 
   grunt.registerTask('default', [
     'check',
