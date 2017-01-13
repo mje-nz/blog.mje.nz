@@ -175,7 +175,7 @@ module.exports = function (grunt) {
             '<%= dirs.dist %>/assets/js/**/*.js',
             '<%= dirs.dist %>/assets/css/**/*.css',
             '<%= dirs.dist %>/assets/img/**/*.{gif,jpg,jpeg,png,svg,webp}',
-            '<%= dirs.dist %>/assets/fonts/**/*.{eot*,otf,svg,ttf,woff}'
+            '<%= dirs.dist %>/assets/fonts/**/*.{eot*,otf,svg,ttf,woff,woff2}'
           ]
         }]
       }
