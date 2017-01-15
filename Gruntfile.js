@@ -18,7 +18,7 @@ module.exports = function (grunt) {
   });
 
   grunt.initConfig({
-    // Configurable paths
+    // Paths
     dirs: {
       app: 'app',
       dist: 'dist'
@@ -172,10 +172,7 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           src: [
-            '<%= dirs.dist %>/assets/js/**/*.js',
-            '<%= dirs.dist %>/assets/css/**/*.css',
-            '<%= dirs.dist %>/assets/img/**/*.{gif,jpg,jpeg,png,svg,webp}',
-            '<%= dirs.dist %>/assets/fonts/**/*.{eot*,otf,svg,ttf,woff,woff2}'
+            '<%= dirs.dist %>/assets/**/*'
           ]
         }]
       }
@@ -260,9 +257,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'clean',
-    // Jekyll cleans files from the target directory, so must run first
-    'jekyll:dist',
+    'clean',  // Clean .jekyll and dist
+    'jekyll:dist',  // Build into dist
     'uncss',
     'autoprefixer',
     'cssmin',
