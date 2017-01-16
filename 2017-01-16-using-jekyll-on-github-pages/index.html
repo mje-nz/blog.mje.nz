@@ -1,0 +1,191 @@
+<!doctype html><html lang=en class=no-js><head><meta charset=utf-8><title>Using Jekyll on Github Pages with gem themes, SSL and a custom URL - mje.nz</title><meta name=description content="This post documents how I set up this blog. My goal was to end up with a git repository full of Markdown files that magically turns into a modern website when I push to Github, using only free software and services."><meta property=og:locale content=en><meta property=og:site_name content=mje.nz><meta property=og:title content="Using Jekyll on Github Pages with gem themes, SSL and a custom URL"><meta property=og:description content="This post documents how I set up this blog. My goal was to end up with a git repository full of Markdown files that magically turns into a modern website when I push to Github, using only free software and services."><meta property=og:type content=article><meta property=article:published_time content=2017-01-16T00:00:00+00:00><script type=application/ld+json>{ "@context" : "http://schema.org", "@type" : "Person", "name" : "Matthew Edwards", "url" : null, "sameAs" : null }</script><link href=/feed.xml type=application/atom+xml rel=alternate title="mje.nz Feed"><meta name=HandheldFriendly content=True><meta name=MobileOptimized content=320><meta name=viewport content="width=device-width,initial-scale=1"><script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/g,"")+" js "</script><link rel=stylesheet href=/assets/css/main.82ee.css><meta http-equiv=cleartype content=on></head><body class=layout--single><!--[if lt IE 9]><div class="notice--danger align-center" style="margin: 0">You are using an <strong>outdated</strong> browser. Please <a href=http://browsehappy.com/ >upgrade your browser</a> to improve your experience.</div><![endif]--><div class=masthead><div class=masthead__inner-wrap><div class=masthead__menu><nav id=site-nav class=greedy-nav><button><div class=navicon></div></button><ul class=visible-links><li class="masthead__menu-item masthead__menu-item--lg"><a href=/ >mje.nz</a></li><li class=masthead__menu-item><a href=/about>About</a></li></ul><ul class="hidden-links hidden"></ul></nav></div></div></div><div id=main role=main><article class=page itemscope itemtype=http://schema.org/CreativeWork><meta itemprop=headline content="Using Jekyll on Github Pages with gem themes, SSL and a custom URL"><meta itemprop=description content="This post documents how I set up this blog. My goal was to end up with a git repository full of Markdown files that magically turns into a modern website when I push to Github, using only free software and services."><meta itemprop=datePublished content="January 16, 2017"><div class=page__inner-wrap><header><h1 class=page__title itemprop=headline>Using Jekyll on Github Pages with gem themes, SSL and a custom URL</h1><p class=page__meta><i class="fa fa-clock-o" aria-hidden=true></i> 11 minute read</p></header><section class=page__content itemprop=text><aside class=sidebar__right><nav class=toc><header><h4 class=nav__title><i class="fa fa-file-text"></i> On This Page</h4></header><ul class=toc__menu id=markdown-toc><li><a href=#introduction id=markdown-toc-introduction>Introduction</a></li><li><a href=#creating-a-new-jekyll-blog id=markdown-toc-creating-a-new-jekyll-blog>Creating a new Jekyll blog</a></li><li><a href=#hosting-on-github-pages id=markdown-toc-hosting-on-github-pages>Hosting on Github Pages</a></li><li><a href=#building-with-grunt id=markdown-toc-building-with-grunt>Building with Grunt</a></li><li><a href=#automation-with-travis-ci id=markdown-toc-automation-with-travis-ci>Automation with Travis CI</a></li><li><a href=#ssl-termination-with-cloudflare id=markdown-toc-ssl-termination-with-cloudflare>SSL Termination with CloudFlare</a><ul><li><a href=#https-redirection id=markdown-toc-https-redirection>HTTPS redirection</a></li><li><a href=#caching-images-etc id=markdown-toc-caching-images-etc>Caching images etc</a></li><li><a href=#caching-html-files id=markdown-toc-caching-html-files>Caching HTML files</a></li></ul></li><li><a href=#wrapping-up id=markdown-toc-wrapping-up>Wrapping up</a></li></ul></nav></aside><h2 id=introduction>Introduction</h2><p>This post documents how I set up this blog. My goal was to end up with a git repository full of Markdown files that magically turns into a modern website when I push to Github, using only free software and services.</p><p>The main moving part is the <a href=https://jekyllrb.com>Jekyll</a> static site generator, which takes a Markdown file per page along with various bits of configuration and theming and compiles it into a static website ready to be hosted somewhere. I prefer to keep the content and design separate, so I’m using the <a href=https://mmistakes.github.io/minimal-mistakes/ >Minimal Mistakes</a> theme as a gem<sup id=fnref:1><a href=#fn:1 class=footnote>1</a></sup>. That way, my repository’s history (mostly) only shows changes to the content and it is relatively easy to change the design.</p><p><a href=https://pages.github.com>Github Pages</a> is a Github feature that lets you serve a Jekyll site (or bare static site) from a Github repository to <code class=highlighter-rouge>yourusername.github.io</code> or <code class=highlighter-rouge>yourusername.github.io/projectname</code>. It’s designed to be used to document open source projects, and even provides a set of pre-made project site themes<sup id=fnref:5><a href=#fn:5 class=footnote>2</a></sup>. It does support using your own domain but only offers SSL on <code class=highlighter-rouge>*.github.io</code>, so for this site I’m using the <a href=https://www.cloudflare.com>CloudFlare</a> CDN for SSL termination.</p><p>Unfortunately Github Pages only supports Jekyll themes and plugins from <a href=https://pages.github.com/versions/ >a whitelist</a>, so if you want to do anything more complicated you have to manage the build yourself. I decided to use the <a href=http://gruntjs.com>Grunt</a> task runner to build and deploy the site. It’s probably a bit old-fashioned these days, but I’m familiar with it and it let me easily perform a few optimisations. Finally, I’m using <a href=https://travis-ci.org>Travis CI</a> to run my Grunt tasks whenever I push.</p><p>The rest of this post goes over each step in more detail. If you want a template, skip to the end.</p><h2 id=creating-a-new-jekyll-blog>Creating a new Jekyll blog</h2><p><em>This section is based on the Minimal Mistakes <a href=https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/ >quick-start guide</a>.</em></p><p>First, create a Gemfile with the following content:</p><div class="language-ruby highlighter-rouge"><pre class=highlight><code><span class=n>source</span> <span class=s2>"https://rubygems.org"</span>
+
+<span class=n>gem</span> <span class=s2>"jekyll"</span><span class=p>,</span> <span class=s2>"~&gt;3.3.0"</span>
+
+<span class=n>gem</span> <span class=s2>"minimal-mistakes-jekyll"</span><span class=p>,</span> <span class=s2>"~&gt;4.1.1"</span>
+</code></pre></div><p>Run <code class=highlighter-rouge>bundle install</code> to install Jekyll, Minimal Mistakes and their dependencies. There are a few bits of the theme that you might want to customise, so you’ll need to copy <code class=highlighter-rouge>_config.yml</code>, <code class=highlighter-rouge>_data/*</code> and <code class=highlighter-rouge>index.html</code> from the <a href=https://github.com/mmistakes/minimal-mistakes.git>repository</a> into your site. Add <code class=highlighter-rouge>theme: "minimal-mistakes-jekyll"</code> to <code class=highlighter-rouge>_config.yml</code> and tweak the rest of the settings to your liking. To change the links at the top of the page, edit <code class=highlighter-rouge>_data/navigation.yml</code>. To create posts, add files named <code class=highlighter-rouge>YEAR-MONTH-DAY-title.md</code> to the <code class=highlighter-rouge>_posts</code> folder. Each post must begin with a <a href=https://jekyllrb.com/docs/frontmatter/ >YAML front matter block</a>, like:</p><div class="language-yaml highlighter-rouge"><pre class=highlight><code><span class=nn>---</span>
+<span class=s>title</span><span class=pi>:</span> <span class=s>Using Jekyll on Github Pages with gem themes, SSL and a custom URL</span>
+<span class=nn>---</span>
+</code></pre></div><p>The filenames are used to generate the permalink for each post<sup id=fnref:6><a href=#fn:6 class=footnote>3</a></sup>.</p><p>Now if you run <code class=highlighter-rouge>bundle exec jekyll serve</code>, Jekyll will build your site and serve it on <code class=highlighter-rouge>http://localhost:4000</code>. You should see something like this:</p><p><img src=/assets/img/2016-11-07-screenshot.9ff6.png alt="A screenshot of a new blog"></p><h2 id=hosting-on-github-pages>Hosting on Github Pages</h2><p>Github Pages lets you host a static site from a Github repository. There are two types of Github Pages sites: project pages and user pages. Project pages can build from the <code class=highlighter-rouge>master</code> branch, the <code class=highlighter-rouge>gh-pages</code> branch or a <code class=highlighter-rouge>docs/</code> folder in the <code class=highlighter-rouge>master</code> branch, and always publish to <code class=highlighter-rouge>username.github.io/projectname</code>. User pages always build from the <code class=highlighter-rouge>master</code> branch of the <code class=highlighter-rouge>username/username.github.io</code> repo and publish to <code class=highlighter-rouge>username.github.io</code>. You can choose to serve either type of page from a custom domain. Note that if you use a custom domain for your user page, your project pages will serve from <code class=highlighter-rouge>yourdomain.com/projectname</code> instead. That would be fine for a user page domain like <code class=highlighter-rouge>projects.mje.nz</code>, but might not be ideal for <code class=highlighter-rouge>mje.nz</code> and certainly wouldn’t make much sense for <code class=highlighter-rouge>blog.mje.nz</code>. Since I want this site to be at <code class=highlighter-rouge>blog.mje.nz</code> but don’t want any project pages to turn up there too, I’m using a <a href=https://github.com/mje-nz/blog.mje.nz>project page</a>.</p><p>There’s not really a lot to say about actually hosting a site on Github Pages. For a simple Jekyll site or a completely static site, just keep your source in the publishing branch and push to publish. For a manually built Jekyll site you can <a href=https://help.github.com/articles/creating-project-pages-using-the-command-line/ >juggle things a bit</a>, or use one of the many easier options as in the next section.</p><h2 id=building-with-grunt>Building with Grunt</h2><p>Github Pages supports building Jekyll sites that only use themes and plugins from <a href=https://pages.github.com/versions/ >the whitelist</a>. However, I’d rather have the site layout separated out into a gem theme and don’t especially fancy any of theirs, so I’ll be building the site manually and just pushing the results. The approach I’m using is based on the <a href=https://github.com/robwierzbowski/generator-jekyllrb>Yeoman Jekyll generator</a>, which unfortunately seems to be abandoned<sup id=fnref:2><a href=#fn:2 class=footnote>4</a></sup>. It’s based around the <a href=http://gruntjs.com>Grunt</a> task runner, and changes the project structure to be a bit more like a standard application:</p><div class=highlighter-rouge><pre class=highlight><code>.
+├── Gemfile
+├── Gruntfile.js
+├── Readme.md
+├── _config.yml
+├── package.json
+├── app/
+│   └── (Jekyll source)
+└── dist/
+    └── (Jekyll output)
+</code></pre></div><p>Here’s a simplified version of my Gruntfile. This one just has a development server with BrowserSync (to update pages in your browser as they change), a build step with cache busting (to enable long cache TTLs), and a deploy step which commits and pushes the built site (maintaining history).</p><div class="language-js highlighter-rouge"><pre class=highlight><code><span class=s1>'use strict'</span><span class=p>;</span>
+
+<span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>grunt</span><span class=p>)</span> <span class=p>{</span>
+  <span class=c1>// Show elapsed time after tasks run</span>
+  <span class=nx>require</span><span class=p>(</span><span class=s1>'time-grunt'</span><span class=p>)(</span><span class=nx>grunt</span><span class=p>);</span>
+
+  <span class=c1>// Load all Grunt tasks (jit-grunt replaces load-grunt-tasks)</span>
+  <span class=nx>require</span><span class=p>(</span><span class=s1>'jit-grunt'</span><span class=p>)(</span><span class=nx>grunt</span><span class=p>,</span> <span class=p>{</span>
+    <span class=na>buildcontrol</span><span class=p>:</span> <span class=s1>'grunt-build-control'</span>
+  <span class=p>});</span>
+
+  <span class=nx>grunt</span><span class=p>.</span><span class=nx>initConfig</span><span class=p>({</span>
+    <span class=c1>// Paths</span>
+    <span class=na>dirs</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>app</span><span class=p>:</span> <span class=s1>'app'</span><span class=p>,</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=s1>'dist'</span>
+    <span class=p>},</span>
+
+    <span class=na>clean</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>files</span><span class=p>:</span> <span class=p>[{</span>
+          <span class=na>dot</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+          <span class=na>src</span><span class=p>:</span> <span class=p>[</span>
+            <span class=s1>'&lt;%= dirs.dist %&gt;/*'</span><span class=p>,</span>
+          <span class=p>]</span>
+        <span class=p>}]</span>
+      <span class=p>},</span>
+      <span class=na>server</span><span class=p>:</span> <span class=p>[</span>
+        <span class=s1>'.jekyll'</span>
+      <span class=p>]</span>
+    <span class=p>},</span>
+
+    <span class=na>jekyll</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>config</span><span class=p>:</span> <span class=s1>'_config.yml,_config.build.yml'</span><span class=p>,</span>
+        <span class=na>src</span><span class=p>:</span> <span class=s1>'&lt;%= dirs.app %&gt;'</span>
+      <span class=p>},</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>dest</span><span class=p>:</span> <span class=s1>'&lt;%= dirs.dist %&gt;'</span><span class=p>,</span>
+        <span class=p>}</span>
+      <span class=p>},</span>
+      <span class=na>server</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>config</span><span class=p>:</span> <span class=s1>'_config.yml'</span><span class=p>,</span>
+          <span class=na>dest</span><span class=p>:</span> <span class=s1>'.jekyll'</span>
+        <span class=p>}</span>
+      <span class=p>}</span>
+    <span class=p>},</span>
+
+    <span class=na>browserSync</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>server</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>bsFiles</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>src</span><span class=p>:</span> <span class=s1>'.jekyll/**/*'</span>  <span class=c1>// Files to sync</span>
+        <span class=p>},</span>
+        <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>server</span><span class=p>:</span> <span class=s1>'.jekyll'</span><span class=p>,</span>  <span class=c1>// Folder to serve from</span>
+          <span class=na>watchTask</span><span class=p>:</span> <span class=kc>true</span>  <span class=c1>// Allow other watch tasks to run after this task</span>
+        <span class=p>}</span>
+      <span class=p>},</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>server</span><span class=p>:</span> <span class=s1>'&lt;%= dirs.dist %&gt;'</span>
+        <span class=p>}</span>
+      <span class=p>}</span>
+    <span class=p>},</span>
+
+    <span class=na>watch</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>jekyll</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>files</span><span class=p>:</span> <span class=p>[</span>
+          <span class=s1>'&lt;%= dirs.app %&gt;/**/*'</span><span class=p>,</span>
+          <span class=s1>'_config.yml'</span>
+        <span class=p>],</span>
+        <span class=na>tasks</span><span class=p>:</span> <span class=p>[</span><span class=s1>'jekyll:server'</span><span class=p>]</span>
+      <span class=p>}</span>
+    <span class=p>},</span>
+
+    <span class=na>filerev</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>length</span><span class=p>:</span> <span class=mi>4</span>
+      <span class=p>},</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>files</span><span class=p>:</span> <span class=p>[{</span>
+          <span class=na>src</span><span class=p>:</span> <span class=p>[</span>
+            <span class=s1>'&lt;%= dirs.dist %&gt;/assets/**/*'</span>
+          <span class=p>]</span>
+        <span class=p>}]</span>
+      <span class=p>}</span>
+    <span class=p>},</span>
+
+    <span class=na>usemin</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>assetsDirs</span><span class=p>:</span> <span class=p>[</span>
+          <span class=s1>'&lt;%= dirs.dist %&gt;'</span><span class=p>,</span>  <span class=c1>// Need this for absolute URLs</span>
+          <span class=s1>'&lt;%= dirs.dist %&gt;/assets/css'</span>  <span class=c1>// Need this for relative URLs</span>
+        <span class=p>]</span>
+      <span class=p>},</span>
+      <span class=na>html</span><span class=p>:</span> <span class=p>[</span><span class=s1>'&lt;%= dirs.dist %&gt;/**/*.html'</span><span class=p>],</span>
+      <span class=na>css</span><span class=p>:</span> <span class=p>[</span><span class=s1>'&lt;%= dirs.dist %&gt;/assets/css/**/*.css'</span><span class=p>]</span>
+    <span class=p>},</span>
+
+    <span class=na>buildcontrol</span><span class=p>:</span> <span class=p>{</span>
+      <span class=na>dist</span><span class=p>:</span> <span class=p>{</span>
+        <span class=na>options</span><span class=p>:</span> <span class=p>{</span>
+          <span class=na>remote</span><span class=p>:</span> <span class=s1>'git@github.com:mje-nz/blog.mje.nz.git'</span><span class=p>,</span>
+          <span class=na>branch</span><span class=p>:</span> <span class=s1>'gh-pages'</span><span class=p>,</span>
+          <span class=na>commit</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+          <span class=na>push</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+          <span class=na>connectCommits</span><span class=p>:</span> <span class=kc>false</span>
+        <span class=p>}</span>
+      <span class=p>}</span>
+    <span class=p>}</span>
+  <span class=p>});</span>
+
+  <span class=nx>grunt</span><span class=p>.</span><span class=nx>registerTask</span><span class=p>(</span><span class=s1>'serve'</span><span class=p>,</span> <span class=kd>function</span> <span class=p>(</span><span class=nx>target</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>if</span> <span class=p>(</span><span class=nx>target</span> <span class=o>===</span> <span class=s1>'dist'</span><span class=p>)</span> <span class=p>{</span>
+      <span class=k>return</span> <span class=nx>grunt</span><span class=p>.</span><span class=nx>task</span><span class=p>.</span><span class=nx>run</span><span class=p>([</span><span class=s1>'build'</span><span class=p>,</span> <span class=s1>'browserSync:dist'</span><span class=p>]);</span>
+    <span class=p>}</span>
+
+    <span class=nx>grunt</span><span class=p>.</span><span class=nx>task</span><span class=p>.</span><span class=nx>run</span><span class=p>([</span>
+      <span class=s1>'clean:server'</span><span class=p>,</span>  <span class=c1>// Clean .jekyll</span>
+      <span class=s1>'jekyll:server'</span><span class=p>,</span>  <span class=c1>// Build into .jekyll once</span>
+      <span class=s1>'browserSync:server'</span><span class=p>,</span>  <span class=c1>// Start browserSync server</span>
+      <span class=s1>'watch'</span>  <span class=c1>// Trigger jekyll:server on file changes</span>
+    <span class=p>]);</span>
+  <span class=p>});</span>
+
+  <span class=nx>grunt</span><span class=p>.</span><span class=nx>registerTask</span><span class=p>(</span><span class=s1>'build'</span><span class=p>,</span> <span class=p>[</span>
+    <span class=s1>'clean'</span><span class=p>,</span>  <span class=c1>// Clean .jekyll and dist</span>
+    <span class=s1>'jekyll:dist'</span><span class=p>,</span>  <span class=c1>// Build into dist</span>
+    <span class=s1>'filerev'</span><span class=p>,</span>  <span class=c1>// Rename assets to include a hash</span>
+    <span class=s1>'usemin'</span><span class=p>,</span>  <span class=c1>// Update references to assets to use new names</span>
+    <span class=p>]);</span>
+
+  <span class=nx>grunt</span><span class=p>.</span><span class=nx>registerTask</span><span class=p>(</span><span class=s1>'deploy'</span><span class=p>,</span> <span class=p>[</span>
+    <span class=s1>'build'</span><span class=p>,</span>
+    <span class=s1>'buildcontrol'</span><span class=p>,</span>  <span class=c1>// Push to Github</span>
+  <span class=p>]);</span>
+<span class=p>};</span>
+</code></pre></div><p>For a full template see <a href=https://github.com/mje-nz/jekyll-blog-template>mje-nz/jekyll-blog-template</a>. For this site I perform a few optimisations at build time, see <a href=https://github.com/mje-nz/blog.mje.nz>mje-nz/blog.mje.nz)</a> for more detail.</p><h2 id=automation-with-travis-ci>Automation with Travis CI</h2><p>http://ellismichael.com/technical/2015/06/12/using-travis-ci-with-github-pages/</p><p>TODO Motivation</p><p><a href=https://travis-ci.org>Travis CI</a> is a popular hosted Continuous Integration service for Github. It’s free for public repos (as long as you don’t mind everyone being able to see your build logs), and available as a paid service for private repos (Travis CI Pro) which you can also get through the Github Education Pack if you’re a student.</p><p>If your blog is in a private repo then the setup is relatively straightforward. By default, Travis CI Pro will <a href=https://blog.travis-ci.com/2012-07-26-travis-pro-update-deploy-keys>quietly add a deploy key</a> to any private repo you activate, which means git pushes will “just work”. If your blog is in a public repo this feature is unavailable, even if you have a Pro subscription. However, the same effect can be achieved in a slightly less convenient way using the <a href=https://docs.travis-ci.com/user/encrypting-files/ >file encryption</a> feature, as suggested in <a href=https://docs.travis-ci.com/user/deployment/custom/#Git>their documentation</a>. First, create a new passwordless SSH key:</p><div class=highlighter-rouge><pre class=highlight><code>$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key: .travis-deploy-key
+Enter passphrase (empty for no passphrase):
+</code></pre></div><p>Add the key to your repo as a deploy key. Then, encrypt the key with the <code class=highlighter-rouge>travis</code> CLI tool:</p><div class=highlighter-rouge><pre class=highlight><code>$ gem install travis
+$ travis encrypt-file .travis-deploy-key
+</code></pre></div><p>This generates an encrypted file (<code class=highlighter-rouge>.travis-deploy-key.enc</code>), sets up environment variables in your Travis CI account which you can use to decrypt it, and prints a command to include in your <code class=highlighter-rouge>.travis.yml</code> file which uses the environment variables to decrypt the file. That way, only someone with access to your Travis CI account can decrypt the file (as long as you don’t print the environment variables in the log and share it) so it’s safe to commit. An alternative is to use a <a href=https://help.github.com/articles/creating-an-access-token-for-command-line-use/ >Github access token</a> instead of a deploy key, but the least-powerful scope that would work is “push to all of my public repos” which seems a bit over-the-top.</p><p>Aside from that, the Travis CI setup is reasonably simple. Recent versions of Ruby and Node need to be installed, so I’m using the Ruby image and installing Node 6 manually (the other way round gave me some issues). Here’s the full <code class=highlighter-rouge>.travis.yml</code> file:</p><div class=highlighter-rouge><pre class=highlight><code>language: ruby
+rvm:
+  - 2.2
+
+cache:
+  bundler: true  # Doesn't seem to work
+  directories:
+  - node_modules
+
+before_install:
+  - nvm install 6
+install:
+  - bundle install
+  - npm install
+
+before_script:
+  - git config --global user.name "Travis-CI"
+  - git config --global user.email "noreply@travis-ci.org"
+  # Decrypt and add deploy key (not necessary for private repo)
+  - openssl aes-256-cbc -K $encrypted_c9381cfb26bc_key -iv $encrypted_c9381cfb26bc_iv -in .travis-deploy-key.enc -out .travis-deploy-key -d
+  - chmod 600 .travis-deploy-key
+  - eval "$(ssh-agent -s)"
+  - ssh-add .travis-deploy-key
+
+script:
+  - grunt deploy
+</code></pre></div><p>Just activate your repo on Travis CI, then commit those two files and watch your site magically build and deploy. Note that if you’re using a user page rather than a project page and therefore publishing to the <code class=highlighter-rouge>master</code> branch, Travis CI will trigger a build when it successfully pushes your build! You can disable this behaviour using the “Build only if .travis.yml is present” setting. The <code class=highlighter-rouge>gh-pages</code> branch is ignored by default, so project pages do not have this issue.</p><p>I have the build set to cache the Ruby and Node package install steps, but I’m not convinced the Bundler cache is doing anything. It takes about 70s to run <code class=highlighter-rouge>bundle install</code> whether or not there’s a cache, which is the majority of my build time.</p><h2 id=ssl-termination-with-cloudflare>SSL Termination with CloudFlare</h2><p><em>This section is based on <a href=https://blog.cloudflare.com/secure-and-fast-github-pages-with-cloudflare/ >a CloudFlare blog post</a>.</em></p><p>Github Pages only supports SSL for pages served without a custom domain. CloudFlare’s Universal SSL can basically do the job, but there are a few caveats:</p><ul><li>The connection from CloudFlare to the origin <em>will</em> use SSL but the origin certificate <em>will not</em> be verified, so it’s still possible to MITM the traffic</li><li>The certificate CloudFlare issues for your site will also have Subject Alternate Names for other sites you don’t control, <a href=https://www.troyhunt.com/should-you-care-about-the-quality-of-your-neighbours-on-a-san-certificate/ >which might be embarrassing</a></li><li>The certificate CloudFlare issues for your site will not work on a certain older browsers<sup id=fnref:4><a href=#fn:4 class=footnote>5</a></sup></li></ul><p>If any of that is a deal-breaker you’ll have to look elsewhere (e.g. hosting on <a href=https://octoperf.com/blog/2015/06/01/host-jekyll-on-s3-cloudfront/ >Amazon S3 behind Cloudfront</a>), but I think it’s fine for most applications. The upside of using CloudFlare is that you also get their caching, DDOS protection, HTTP/2 support etc for free.</p><p>To set it up, register with CloudFlare and <a href=https://support.cloudflare.com/hc/en-us/articles/201720164-Step-2-Create-a-CloudFlare-account-and-add-a-website>add your domain to your CloudFlare account</a>. Set the custom domain on your Github Pages page to the domain (or subdomain) you want to serve it from, and add a CNAME record on CloudFlare pointing from that domain to <code class=highlighter-rouge>yourusername.github.io</code> (whether you’re using a project page or a user page), and you’re done!</p><h3 id=https-redirection>HTTPS redirection</h3><p>You can redirect to HTTPS automatically using a <a href=https://support.cloudflare.com/hc/en-us/articles/200172336-How-do-I-create-a-Page-Rule->CloudFlare Page Rule</a>. You’ll have to wait a while for CloudFlare to generate an SSL certificate first.</p><h3 id=caching-images-etc>Caching images etc</h3><p>By default, CloudFlare will cache <a href=https://support.cloudflare.com/hc/en-us/articles/200172516-Which-file-extensions-does-CloudFlare-cache-for-static-content>most static filetypes</a> for 4 hours regardless of the cache headers from the origin server (which for Github Pages is a 10 minute TTL). Since my build process renames assets when they change, it’s safe to set a long browser cache expiration time (I use one month). Note that this is how long your visitors’ browsers will wait before requesting a file again from CloudFlare, not how long CloudFlare’s edge servers will wait before requesting a file again from Github Pages. The default edge cache expiration setting seems to be to respect the cache headers from the origin server. You can only change this setting with a Page Rule.</p><h3 id=caching-html-files>Caching HTML files</h3><p>CloudFlare does not cache HTML files by default. You can set it to with a Page Rule, but if you’re not careful you could end up unable to update your front page and posts! On this site, I have a page rule that gives HTML files a browser cache TTL of 30 minutes (the shortest setting) and an edge cache TTL of one day, and I purge the CloudFlare cache using <a href=https://github.com/ghinda/grunt-cloudflare-purge>grunt-cloudflare-purge</a> whenever the content updates. That means my whole website can be served from CloudFlare’s cache, but visitors might not see updates for up to half an hour. There’s a race condition if I update one post to point at a new part of another and a visitor has both in their browser cache, but I don’t think that’s too big a deal.</p><h2 id=wrapping-up>Wrapping up</h2><p>To see all this put together, check out <a href=https://github.com/mje-nz/jekyll-blog-template>mje-nz/jekyll-blog-template</a>. To see how this site is set up (which is a little more involved), see <a href=https://github.com/mje-nz/blog.mje.nz>mje-nz/blog.mje.nz</a>.</p><div class=footnotes><ol><li id=fn:1><p>As of <a href=https://jekyllrb.com/news/2016/07/26/jekyll-3-2-0-released/ >Jekyll 3.2</a>, themes can be packaged as Ruby gems – previously themes were used by forking a repository and carefully merging when the theme changes.&nbsp;<a href=#fnref:1 class=reversefootnote>&#8617;</a></p></li><li id=fn:5><p>They don’t seem to have any intention of supporting community themes but the themes they provide look reasonably nice, see <a href=https://help.github.com/articles/creating-a-github-pages-site-with-the-jekyll-theme-chooser/ >here</a> for documentation.&nbsp;<a href=#fnref:5 class=reversefootnote>&#8617;</a></p></li><li id=fn:6><p>Although not directly, see <a href=https://jekyllrb.com/docs/permalinks/ >here</a>.&nbsp;<a href=#fnref:6 class=reversefootnote>&#8617;</a></p></li><li id=fn:2><p>As of 2017-01-13 it hasn’t been updated in a few years, and I had to choose the HTML5 boilerplate template to get it to run to completion.&nbsp;<a href=#fnref:2 class=reversefootnote>&#8617;</a></p></li><li id=fn:4><p>CloudFlare’s free SSL certificates work on most browsers, but notably only on Windows Vista or later, Mac OSX 10.6 or later, iOS 4 or later, and Android 3 or later, see <a href=https://support.cloudflare.com/hc/en-us/articles/203041594-What-browsers-work-with-CloudFlare-s-SSL-certificates->here</a>.&nbsp;<a href=#fnref:4 class=reversefootnote>&#8617;</a></p></li></ol></div></section><footer class=page__meta><p class=page__date><strong><i class="fa fa-fw fa-calendar" aria-hidden=true></i> Updated:</strong> <time datetime=2017-01-16T00:00:00+00:00>January 16, 2017</time></p></footer><nav class=pagination><a href=/2016-12-27-rfm69-frequency-bands-in-new-zealand/ class=pagination--pager title="RFM69 frequency bands in New Zealand
+">Previous</a> <a href=# class="pagination--pager disabled">Next</a></nav></div></article></div><div class=page__footer><footer><div class=page__footer-follow><ul class=social-icons><li><strong></strong></li><li><a href=http://github.com/mje-nz><i class="fa fa-fw fa-github" aria-hidden=true></i> GitHub</a></li><li><a href=/feed.xml><i class="fa fa-fw fa-rss-square" aria-hidden=true></i> Feed</a></li></ul></div><div class=page__footer-copyright>&copy; 2017 Matthew Edwards. Powered by <a href=http://jekyllrb.com rel=nofollow>Jekyll</a> &amp; <a href=https://mademistakes.com/work/minimal-mistakes-jekyll-theme/ rel=nofollow>Minimal Mistakes</a>.</div></footer></div><script src=/assets/js/main.min.c473.js></script></body></html>
