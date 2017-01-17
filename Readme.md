@@ -20,5 +20,4 @@ TODO:
 * Contact page?
 * Fix smart quotes
 * Comments
-* Analytics
 * Sharing buttons?
