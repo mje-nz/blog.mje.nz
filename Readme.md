@@ -19,3 +19,6 @@ TODO:
 * 404 page
 * Contact page?
 * Fix smart quotes
+* Comments
+* Analytics
+* Sharing buttons?
