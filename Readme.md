@@ -20,6 +20,10 @@ Workflow:
 * Push `master` to [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz), which will trigger the Github Pages build and update the live site
 
 TODO:
+* On posts, add date to subtitle
+* On posts, move last updated from footer to subtitle
+
+Old TODO:
 * Subset Font Awesome
 * Use Jekyll Picture Tag for hero images, cache generated images
 * Tweak visual style
