@@ -1,28 +1,34 @@
-# Jekyll configuration precedence:
-# 1. Gruntfile task
-# 2. config.build.yml
-# 3. config.yml
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your entire site, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# `jekyll serve`. If you change this file, please restart the server process.
 
-# _config.build.yml sets future and show_drafts to false on `grunt build`
-future: true
-show_drafts: true
+# Theme Settings
+#
+# Review documentation to determine if you should use `theme` or `remote_theme`
+# https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/#installing-the-theme
 
-# Minimal Mistakes config follows
+remote_theme             : "mmistakes/minimal-mistakes@4.16.3"
+minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+
 # Site Settings
-theme                    : "mje-nz-mistakes-jekyll"
 locale                   : "en"
 title                    : "mje.nz"
 title_separator          : "-"
 name                     : "Matthew Edwards"
 description              : ""
-url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://blog.mje.nz"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
-  provider               : # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "custom"
+  provider               : # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
     shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
@@ -32,30 +38,47 @@ comments:
     appid                :
     num_posts            : # 5 (default)
     colorscheme          : # "light" (default), "dark"
+  utterances:
+    theme                : # "github-light" (default), "github-dark"
+    issue_term           : # "pathname" (default)
 staticman:
-  allowedFields          : #['name', 'email', 'url', 'message']
-  branch                 : #"master"
-  commitMessage          : #"New comment."
-  filename               : #comment-{@timestamp}
-  format                 : #"yml"
-  moderation             : #true
-  path                   : #"docs/_data/comments/{options.slug}"
-  requiredFields         : #['name', 'email', 'message']
+  allowedFields          : # ['name', 'email', 'url', 'message']
+  branch                 : # "master"
+  commitMessage          : # "New comment by {fields.name}"
+  filename               : # comment-{@timestamp}
+  format                 : # "yml"
+  moderation             : # true
+  path                   : # "/_data/comments/{options.slug}" (default)
+  requiredFields         : # ['name', 'email', 'message']
   transforms:
-    email                : #"md5"
+    email                : # "md5"
   generatedFields:
     date:
-      type               : #"date"
+      type               : # "date"
       options:
-        format           : #"iso8601" # "iso8601" (default), "timestamp-seconds", "timestamp-milliseconds"
+        format           : # "iso8601" (default), "timestamp-seconds", "timestamp-milliseconds"
+  endpoint               : # URL of your own deployment with trailing slash, will fallback to the public instance
+reCaptcha:
+  siteKey                :
+  secret                 :
 atom_feed:
   path                   : # blank (default) uses feed.xml
-
+search                   : # true, false (default)
+search_full_content      : # true, false (default)
+search_provider          : # lunr (default), algolia, google
+algolia:
+  application_id         : # YOUR_APPLICATION_ID
+  index_name             : # YOUR_INDEX_NAME
+  search_only_api_key    : # YOUR_SEARCH_ONLY_API_KEY
+  powered_by             : # true (default), false
+google:
+  search_engine_id       : # YOUR_SEARCH_ENGINE_ID
+  instant_search         : # false (default), true
 # SEO Related
 google_site_verification :
 bing_site_verification   :
-alexa_site_verification  :
 yandex_site_verification :
+naver_site_verification  :
 
 # Social Sharing
 twitter:
@@ -77,6 +100,7 @@ analytics:
   provider               : "google-universal"  #false # false (default), "google", "google-universal", "custom"
   google_universal:
     tracking_id          : "UA-90524903-1"
+    anonymize_ip         : # true, false (default)
 
 
 # Site Author
@@ -86,29 +110,47 @@ author:
   bio              : "Probably procrastinates a bit much."
   location         : "New Zealand"
   email            :
-  uri              :
-  bitbucket        :
-  codepen          :
-  dribbble         :
-  flickr           :
-  facebook         :
-  foursquare       :
-  github           : mje-nz
-  google_plus      :
-  keybase          :
-  instagram        :
-  lastfm           :
-  linkedin         :
-  pinterest        :
-  soundcloud       :
-  stackoverflow    : # "123456/username" (the last part of your profile url, e.g. http://stackoverflow.com/users/123456/username)
-  steam            :
-  tumblr           :
-  twitter          :
-  vine             :
-  weibo            :
-  xing             :
-  youtube          :
+  links:
+    #- label: "Email"
+    #  icon: "fas fa-fw fa-envelope-square"
+    #  # url: mailto:your.name@email.com
+    #- label: "Website"
+    #  icon: "fas fa-fw fa-link"
+    #  # url: "https://your-website.com"
+    #- label: "Twitter"
+    #  icon: "fab fa-fw fa-twitter-square"
+    #  # url: "https://twitter.com/"
+    #- label: "Facebook"
+    #  icon: "fab fa-fw fa-facebook-square"
+    #  # url: "https://facebook.com/"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mje-nz"
+    #- label: "Instagram"
+    #  icon: "fab fa-fw fa-instagram"
+    #  # url: "https://instagram.com/"
+
+# Site Footer
+footer:
+  links:
+    #- label: "Twitter"
+    #  icon: "fab fa-fw fa-twitter-square"
+    #  # url:
+    #- label: "Facebook"
+    #  icon: "fab fa-fw fa-facebook-square"
+    #  # url:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mje-nz"
+    #- label: "GitLab"
+    #  icon: "fab fa-fw fa-gitlab"
+    #  # url:
+    #- label: "Bitbucket"
+    #  icon: "fab fa-fw fa-bitbucket"
+    #  # url:
+    #- label: "Instagram"
+    #  icon: "fab fa-fw fa-instagram"
+    #  # url:
 
 
 # Reading Files
@@ -178,16 +220,17 @@ sass:
 permalink: /:categories/:year-:month-:day-:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
-timezone: # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 
-# Plugins
-gems:
+# Plugins (previously gems:)
+plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
   - jemoji
+  - jekyll-include-cache
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -196,6 +239,7 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jemoji
+  - jekyll-include-cache
 
 
 # Archives
