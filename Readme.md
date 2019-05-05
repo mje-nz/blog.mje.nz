@@ -20,8 +20,8 @@ Workflow:
 * Push `master` to [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz), which will trigger the Github Pages build and update the live site
 
 TODO:
-* On posts, add date to subtitle
-* On posts, move last updated from footer to subtitle
+* Add last_modified_at plugin (after [pages-gem/119](https://github.com/github/pages-gem/pull/119))
+* Clear Cloudflare cache on update
 
 Old TODO:
 * Subset Font Awesome
