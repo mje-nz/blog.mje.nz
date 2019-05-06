@@ -1,4 +1,3 @@
-
 ---
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
@@ -8,3 +7,16 @@
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
+.masthead {
+  // From .page
+  @include breakpoint($large) {
+    float: right;
+    width: calc(100% - #{$right-sidebar-width-narrow});
+    padding-right: $right-sidebar-width-narrow;
+  }
+
+  @include breakpoint($x-large) {
+    width: calc(100% - #{$right-sidebar-width});
+    padding-right: $right-sidebar-width;
+  }
+}
