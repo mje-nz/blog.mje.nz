@@ -28,7 +28,6 @@ Old TODO:
 * Use Jekyll Picture Tag for hero images, cache generated images
 * Tweak visual style
 * Run linters, check links etc on builds
-* 404 page
 * Contact page?
 * Fix smart quotes
 * Comments
