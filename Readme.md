@@ -2,7 +2,6 @@
 
 The `master` branch of [mje-nz/blog-private](https://github.com/mje-nz/blog-private) is staging for [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz).
 The `draft` branch is rebased on top with my drafts and unpublished changes.
-Note that the Travis badge above is for the live site; there are no Travis builds here.
 
 Setup:
 ```bash
@@ -22,14 +21,13 @@ Workflow:
 To add a new image, copy it into `assets/_originals` and then resize it into `assets/img`.
 
 TODO:
+* Figure out workflow to strip originals and these TODOs from main repo
 * Add last_modified_at plugin (after [pages-gem/119](https://github.com/github/pages-gem/pull/119))
 * Clear Cloudflare cache on update
 
 Old TODO:
-* Subset Font Awesome
-* Use Jekyll Picture Tag for hero images, cache generated images
-* Tweak visual style
 * Run linters, check links etc on builds
+* Subset Font Awesome
 * Contact page?
 * Fix smart quotes
 * Comments
