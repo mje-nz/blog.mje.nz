@@ -7,8 +7,14 @@
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
-.masthead {
-  // From .page
+.masthead__inner-wrap {
+  // Like #main
+  @include clearfix;
+  display: block;
+}
+
+.masthead__menu {
+  // Like .page
   @include breakpoint($large) {
     float: right;
     width: calc(100% - #{$right-sidebar-width-narrow});
