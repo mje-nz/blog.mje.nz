@@ -1,4 +1,4 @@
-# Blog source [![Build Status](https://travis-ci.org/mje-nz/blog.mje.nz.svg?branch=master)](https://travis-ci.org/mje-nz/blog.mje.nz)
+# Blog source
 
 The `master` branch of [mje-nz/blog-private](https://github.com/mje-nz/blog-private) is staging for [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz).
 The `draft` branch is rebased on top with my drafts and unpublished changes.
