@@ -23,12 +23,11 @@ To add a new image, copy it into `assets/_originals` and then resize it into `as
 TODO:
 * Figure out workflow to strip originals and these TODOs from main repo
 * Add last_modified_at plugin (after [pages-gem/119](https://github.com/github/pages-gem/pull/119))
-* Clear Cloudflare cache on update
+* Find a font where smart quotes don't look so bad
 
 Old TODO:
 * Run linters, check links etc on builds
 * Subset Font Awesome
 * Contact page?
-* Fix smart quotes
 * Comments
 * Sharing buttons?
