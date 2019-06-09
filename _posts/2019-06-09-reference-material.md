@@ -1,5 +1,6 @@
 ---
 title: Reference material
+excerpt: Online resources that are kind of hard to Google for.
 ---
 
 Online resources that are kind of hard to Google for:
