@@ -26,14 +26,13 @@ GitLab Pages also doesn't support redirects, but [Netlify does](https://www.netl
 I like having the blog platform-agnostic, but the front page doesn't matter as much so I've given it a go.
 
 Unlike what I've read, you can switch from GitHub Pages to Netlify without any downtime.
-First, configure Netlify to build the site and serve it at `mje.netlify.com`.
-Then in the CloudFlare DNS panel, set the CNAME for `mje.nz` to point at `mje.netlify.com`.
-Since CloudFlare is still in front there's no need to wait for DNS to propagate; the site will continue to resolve to CloudFlare's anycast network and the edge nodes will rapidly switch origins from GitHub Pages to Netlify (which at this point are identical).
-CloudFlare continues to serve everything over HTTPS with HTTP/2, and Full (Strict) SSL continues to work.[^1]
+First, I configured Netlify to build the site and serve it at `mje.netlify.com` and `mje.nz`.
+Then in the CloudFlare DNS panel, I set the CNAME for `mje.nz` to point at `mje.netlify.com`.
+Since CloudFlare is still in front there's no need to wait for DNS to propagate; the site will continue to resolve to CloudFlare's anycast network and the edge nodes will rapidly switch origins from GitHub Pages to Netlify (which at this point are serve identical content).
+CloudFlare continues to serve everything over HTTPS, and Full (Strict) SSL continues to work.[^1]
+Netlify complains about the DNS configuration because they want you to use their CDN, but it works just fine.
 
-
-
-After setting it up, I just turned Github Pages off and switched to using Netlify redirects:
+After setting it up, I turned Github Pages off and switched to using Netlify redirects:
 ```bash
 # _redirects
 /ref https://blog.mje.nz/2019-06-09-reference-material/
