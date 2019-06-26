@@ -3,7 +3,7 @@ title: Using Jekyll on GitHub Pages with gem themes, SSL and a custom URL
 excerpt: This post documents how I set up this blog. My goal was to end up with a git repository full of Markdown files that magically turns into a modern website when I push to GitHub, using only free software and services.
 ---
 
-_Updated 2018-05-24: [I've simplified my setup](2019-05-24-new-jekyll-setup).  GitHub Pages supports SSL for custom domains.  There are more alternatives to GitHub Pages now, like [Gitlab Pages](https://www.scivision.dev/gitlab-pages-vs-GitHub-pages/) and [Netlify](https://www.scivision.dev/GitHub-pages-to-netlify/)._
+_Updated 2018-05-24: [I've simplified my setup](/2019-05-24-new-jekyll-setup).  GitHub Pages supports SSL for custom domains.  There are more alternatives to GitHub Pages now, like [Gitlab Pages](https://www.scivision.dev/gitlab-pages-vs-GitHub-pages/) and [Netlify](https://www.scivision.dev/GitHub-pages-to-netlify/)._
 
 {% include toc %}
 
@@ -261,7 +261,7 @@ For this site I perform a few optimisations at build time, see [mje-nz/blog.mje.
 
 
 ## Automation with Travis CI
-_This section is based on a post from [Ellis Michael](http://ellismichael.com/technical/2015/06/12/using-travis-ci-with-GitHub-pages/)._
+_This section is based on a post from [Ellis Michael](https://ellismichael.com/blog/2015/06/12/using-travis-ci-with-github-pages/)._
 
 In order to use a non-GitHub-approved build process but still publish updates by just pushing I use [Travis CI](https://travis-ci.org), a popular hosted Continuous Integration service for GitHub.
 It's free for public repos (as long as you don't mind everyone being able to see your build logs), and available as a paid service for private repos (Travis CI Pro) which you can also get through the GitHub Education Pack if you're a student.
@@ -400,7 +400,7 @@ To see how this site is set up (which is a little more involved), see [mje-nz/bl
 [^2]: As of 2017-01-13 it hasn't been updated in a few years, and I had to choose the HTML5 boilerplate template to get it to run to completion.
 [^3]: [Grunt-contrib-imagemin](https://GitHub.com/gruntjs/grunt-contrib-imagemin) packages gifsicle, jpegtran, optipng, and svgo.
 [^4]: CloudFlare's free SSL certificates work on most browsers, but notably only on Windows Vista or later, Mac OSX 10.6 or later, iOS 4 or later, and Android 3 or later, see [here](https://support.cloudflare.com/hc/en-us/articles/203041594-What-browsers-work-with-CloudFlare-s-SSL-certificates-).
-[^5]: They don't seem to have any intention of supporting community themes but the themes they provide look reasonably nice, see [here](https://help.GitHub.com/articles/creating-a-GitHub-pages-site-with-the-jekyll-theme-chooser/) for documentation.
+[^5]: They don't seem to have any intention of supporting community themes but the themes they provide look reasonably nice, see [here](https://help.github.com/en/articles/adding-a-jekyll-theme-to-your-github-pages-site-with-the-jekyll-theme-chooser) for documentation.
 [^6]: Although not directly, see [here](https://jekyllrb.com/docs/permalinks/).
 
 
