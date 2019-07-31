@@ -1,6 +1,8 @@
 ---
 title: Coloured latexmk output
+excerpt: The LaTeX community is a bit different to other software communities in that it mostly consists of grey-bearded academics with work to do and PhD students procrastinating from writing their theses (ahem).
 ---
+_Updated 2019-07-31: [I've released a tool which does this and more](/2019-07-31-quietex/).  Added some caveats and notes._
 
 The LaTeX community is a bit different to other software communities in that it mostly consists of grey-bearded academics with work to do and PhD students procrastinating from writing their theses (ahem).
 As such, LaTeX packages and tools fall into one of two categories: relics of a bygone age that nevertheless do basically everything you want, and trendy projects on GitHub that die off after their authors graduate.
@@ -29,7 +31,7 @@ To colour the "Run number 1 of rule 'pdflatex'" messages, add this to `latexmkrc
 }
 ```
 
-This wraps the subroutine `latexmk` uses to print important messages with `print` statements which change the terminal colour to green and back, as long as stderr is going to a terminal.
+This wraps the subroutine `latexmk` uses to print important messages with `print` statements which change the terminal colour to green and back, as long as stderr is going to a terminal [^2].
 The `print` statements have to be to stderr for two reasons.
 Firstly, `warn_running` prints to stderr and `print` is line buffered, so `print color('green')` wouldn't take effect until something else prints a line to stdout (or `STDOUT->flush()` is called).
 More importantly, for the colours to still work with stdout redirected (`latexmk > log`) the color escape sequences have to go to stderr anyway.
@@ -97,6 +99,8 @@ if __name__ == '__main__':
 ```
 
 To use it, put it in the same directory as your TeX files and add `$pdflatex = "./filter.py pdflatex %O %S";` to your `latexmkrc`.
+Note that the script doesn't handle TeX input prompts, so you should use `-interaction=nonstopmode` to avoid them (see [my next post](/2019-07-31-quietex/) for more).
 
 
 [^1]: Naturally, [his personal website](http://www.personal.psu.edu/~jcc8/index.html) has a picture of him as a young man!
+[^2]: I got the idea for this from [this Stack Overflow answer](https://tex.stackexchange.com/a/406370).
