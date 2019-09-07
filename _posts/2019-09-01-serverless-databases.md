@@ -16,6 +16,7 @@ These services are all serverless databases of some description with a permanent
 [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) is a NoSQL key/value and document store.
 Widely used, considered the default storage solution for AWS Lambda.
 Everyone hates it.
+No full-text search.
 
 Limitations:
 
@@ -27,6 +28,7 @@ Limitations:
 ### GCP Firestore
 [Google Cloud Platform Firestore](https://cloud.google.com/firestore/) is a brand new NoSQL document store.
 It's predecessor (Firebase Realtime Database) has a bad reputation, but Firestore seems okay so far.
+No full-text search.
 
 Limitations:
 
@@ -42,6 +44,7 @@ Note that egress to other GCP services in the same region is free, so it would w
 ### FaunaDB
 [FaunaDB](https://fauna.com) is a multi-model (relational, document, graph, composite) NoSQL database.
 No-one hates it and there's a bit of buzz around the technical aspects, but no-one has much to say about using it in production.
+No full-text search.
 
 Limitations:
 * 5 GB storage (then USD$0.18/GB/month)
