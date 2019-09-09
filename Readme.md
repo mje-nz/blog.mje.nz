@@ -16,7 +16,7 @@ Workflow:
 * Make a change in `draft`, iterating with a local Jekyll build (`bundle exec jekyll serve --drafts`) until complete
 * Switch to `master`, run `git checkout draft <changed file>` and commit
 * Rebase `draft` back on top to keep history tidy
-* Push `master` to [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz), which will trigger the Github Pages build and update the live site
+* Push `master` to [mje-nz/blog.mje.nz](https://github.com/mje-nz/blog.mje.nz), which will trigger the GitHub Pages build and update the live site
 
 To add a new image, copy it into `assets/_originals` and then resize it into `assets/img`.
 

@@ -32,7 +32,7 @@ Since CloudFlare is still in front there's no need to wait for DNS to propagate;
 CloudFlare continues to serve everything over HTTPS, and Full (Strict) SSL continues to work.[^1]
 Netlify complains about the DNS configuration because they want you to use their CDN, but it works just fine.
 
-After setting it up, I turned Github Pages off and switched to using Netlify redirects:
+After setting it up, I turned GitHub Pages off and switched to using Netlify redirects:
 ```bash
 # _redirects
 /ref https://blog.mje.nz/2019-06-09-reference-material/
