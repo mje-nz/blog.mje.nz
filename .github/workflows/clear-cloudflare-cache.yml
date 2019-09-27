@@ -13,5 +13,5 @@ jobs:
         [[ -n "$CLOUDFLARE_TOKEN" ]] || ( echo "Error: Must set CLOUDFLARE_TOKEN secret"; exit 1 )
         curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/22603e673e9a26ee9d65cfcb98c5a956/purge_cache" \
           -H "Authorization: Bearer $CLOUDFLARE_TOKEN" \
-          -H "Content-Type:application/json" \
-          --data '{"purge_everything":true}'
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything": true}'

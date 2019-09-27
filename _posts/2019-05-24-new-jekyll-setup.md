@@ -1,6 +1,7 @@
 ---
 title: Using Jekyll on GitHub Pages (again)
 ---
+_Updated 2019-09-29: Now I'm [using GitHub Actions instead of Zapier to clear CloudFlare's cache](/2019-09-29-using-github-actions-to-automate-cloudflare-cache-purges-for-github-pages-sites/)._
 
 In [my previous post on this subject](/2017-01-16-using-jekyll-on-github-pages/), I outlined a very complicated way of setting up a Jekyll blog on GitHub Pages.
 When I came back to the blog after a long hiatus I had no idea how anything worked and didn't feel like all the moving parts are good value any more, so I threw it all out and started again.

@@ -26,3 +26,8 @@
     padding-right: $right-sidebar-width;
   }
 }
+
+// Alternate style for code block with slightly smaller font
+.code-small {
+  font-size: 0.6em !important;
+}
