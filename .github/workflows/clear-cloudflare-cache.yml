@@ -1,0 +1,17 @@
+name: Clear CloudFlare cache
+on: [deployment]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call CloudFlare API
+      # Only run after deploys from production repo, not staging
+      if: github.repository == 'mje-nz/blog.mje.nz'
+      env:
+        CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+      run: |
+        [[ -n "$CLOUDFLARE_TOKEN" ]] || ( echo "Error: Must set CLOUDFLARE_TOKEN secret"; exit 1 )
+        curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/22603e673e9a26ee9d65cfcb98c5a956/purge_cache" \
+          -H "Authorization: Bearer $CLOUDFLARE_TOKEN" \
+          -H "Content-Type:application/json" \
+          --data '{"purge_everything":true}'
