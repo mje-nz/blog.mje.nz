@@ -28,6 +28,74 @@
 }
 
 // Alternate style for code block with slightly smaller font
-.code-small {
+.code-small div {
   font-size: 0.6em !important;
+}
+
+// Match margins around code blocks
+.no-gap {
+  margin-bottom: 0 !important;
+}
+.no-gap + .highlighter-rouge {
+  margin-top: 1em !important;
+}
+
+// Make gists scroll
+.gist-data {
+    height: 75vh;  // 75% of viewport height
+    overflow-y: visible;
+}
+
+// Parts list
+.parts-list td {
+  padding: 0.1em;
+}
+.parts-list p {
+  // Remove large margin
+  margin-bottom: 0;
+}
+.parts-list td:first-child {
+  @include breakpoint($small) {
+    width: 20%;
+  }
+  width: 30%;
+  min-width: 50px;
+}
+.parts-list td:last-child p {
+  margin-left: 0.5em;
+}
+.parts-list ul {
+  // Remove large margin
+  margin: 0.5em 0 0 0;
+}
+
+// Centered figure
+figure.center {
+  > a,
+  > img {
+    @include breakpoint($small) {
+      width: calc(70% - 0.5em);
+      margin: 0 auto 0 auto;
+    }
+    width: 100%;
+  }
+
+  figcaption {
+    padding-left: 1em;
+    padding-right: 1em;
+    @include breakpoint($small) {
+      width: 70%;
+      margin: 0 auto 0 auto;
+    }
+    width: 100%;
+  }
+}
+
+// Override
+figure {
+  img,
+  iframe,
+  .fluid-width-video-wrapper {
+    margin-bottom: 0.3em !important;
+  }
 }
