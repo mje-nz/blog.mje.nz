@@ -292,6 +292,7 @@ defaults:
       comments: # true
       share: # true
       related: false
+      toc_sticky: true
   - scope:
       path: ""
       type: pages
