@@ -620,7 +620,7 @@ disable =
     unused-wildcard-import,
 
 [mypy]
-# Don't when when an import cannot be resolved
+# Don't warn when an import cannot be resolved
 ignore_missing_imports = True
 # Check the body of every function, regardless of
 # whether it has type annotations
