@@ -2,6 +2,10 @@
 title: Writing better Python code, automatically
 toc: true
 ---
+_Updated 2021-10-13: Just fixed a few typos and made some minor updates.  If you're reading this in 2021 (or later) you should probably use [poetry](https://python-poetry.org) instead of pip and configure your tools with `pyproject.toml` instead of `setup.cfg`, but otherwise this is still pretty good material._
+<!-- TODO: look into https://github.com/m-burst/flake8-pytest-style -->
+<!-- TODO: update versions in pre-commit -->
+
 As a software developer, your time, focus, and mental stamina are precious resources.
 Modern tooling can free you from having to think about all sorts of menial tasks, letting you write better code with less effort.
 This post outlines a process for gradually introducing such tooling into an established project.
@@ -67,7 +71,7 @@ select =
     I900
 ignore =
     # pycodestyle
-    W605,
+    E722,W605,
     # pyflakes
     F504,F522,F523,F541,F705,
     # flake8-bugbear
@@ -239,6 +243,8 @@ select =
     # pep8-naming
     N807,
 ignore =
+    # pycodestyle (overlaps with B904)
+    E722,
     # pyflakes (allow star imports)
     F403,F405,
     # flake8-comprehensions (allow dict() calls)
@@ -268,7 +274,7 @@ With modern tooling, those downsides go away.
 The easiest way to maintain a consistent code style is to use [Black](https://github.com/psf/black), the Python formatter with basically no options.
 [Black's code style](https://github.com/psf/black/blob/master/docs/the_black_code_style.md) is an opinionated subset of [PEP8](https://www.python.org/dev/peps/pep-0008/).
 I don't always appreciate its style choices, particularly how it indents deeply-nested data structures and [how it formats math](https://github.com/psf/black/issues/148), but in my opinion the benefits outweigh the minor annoyances.
-It's the most popular Python formatter by a wide margin, with over 35k projects on GitHub using it, so there's a strong argument that getting comfortable with the Black style will pay off if you want to be part of the greater Python community.
+It's the most popular Python formatter by a wide margin, with over ~~35k~~ 83k projects on GitHub using it, so there's a strong argument that getting comfortable with the Black style will pay off if you want to be part of the greater Python community.
 Not everyone is a fan though; if you have strong feelings about single quotes or where brackets should go you might prefer Google's [yapf](https://github.com/google/yapf), which is extremely configurable, or if you [don't believe in auto-formatting at all](https://luminousmen.com/post/my-unpopular-opinion-about-black-code-formatter) then you might prefer to just use strict Flake8 checks (like the ones we're about to set up).
 
 While we're making sweeping code changes, we may as well use [isort](https://pycqa.github.io/isort/) to keep package imports sorted[^isort] and [yesqa](https://github.com/asottile/yesqa) to automatically remove unnecessary `# noqa` comments:[^yesqa]
@@ -327,6 +333,8 @@ select =
     # pep8-naming
     N,
 ignore =
+    # pycodestyle (overlaps with B904)
+    E722,
     # pycodestyle (for black)
     E203,W503,
     # pyflakes (allow star imports)
@@ -345,13 +353,7 @@ ignore =
 
 # Also in setup.cfg
 [isort]
-# From black readme
-multi_line_output=3
-include_trailing_comma=True
-force_grid_wrap=0
-use_parentheses=True
-ensure_newline_before_comments = True
-line_length=88
+profile=black
 ```
 
 Black should fix most of the style issues Flake8 checks, so now Flake8 is turned on all the way apart from where tools clash and a few things I find too strict.
@@ -404,7 +406,7 @@ disable =
       - id: pylint
 ```
 
-There are also other linters I haven't used, notably [Radon](https://radon.readthedocs.io/en/latest/), which complains if your code is too complex, and [Bandit](https://github.com/PyCQA/bandit), which checks for security flaws.
+There are also other linters I haven't used, notably [flake8-pytest-style](https://github.com/m-burst/flake8-pytest-style), which checks `pytest` tests, [Radon](https://radon.readthedocs.io/en/latest/), which complains if your code is too complex, and [Bandit](https://github.com/PyCQA/bandit), which checks for security flaws.
 
 
 ### Static typing
@@ -577,6 +579,8 @@ select =
     # pep8-naming
     N,
 ignore =
+    # pycodestyle (overlaps with B904)
+    E722,
     # pycodestyle (for black)
     E203,W503,
     # pyflakes (allow star imports)
@@ -594,13 +598,7 @@ ignore =
     D404,D405,
 
 [isort]
-# From black readme
-multi_line_output=3
-include_trailing_comma=True
-force_grid_wrap=0
-use_parentheses=True
-ensure_newline_before_comments = True
-line_length=88
+profile = black
 
 [pylint.MASTER]
 disable =
@@ -668,7 +666,7 @@ jobs:
 
 
 ## Appendix: Flake8 rules by importance
-As of flake8 3.8.4, flake8-bugbear 2020.11.1, flake8-comprehensions 3.3.0, pydocstyle 5.1.1, flake8-requirements 1.3.3, and pep8-naming 0.11.1, here are the rules I think are important.
+As of flake8 3.8.4, flake8-bugbear 20.11.1, flake8-comprehensions 3.3.0, pydocstyle 5.1.1, flake8-requirements 1.3.3, and pep8-naming 0.11.1, here are the rules I think are important.
 I've abbreviated some of the flake8-bugbear and flake8-comprehensions rules; see their docs for full explanations.
 For full explanations of many of the core Flake8 rules, see Grant McConnaughey's [Big Ol' List of Rules](https://www.flake8rules.com).
 Note that many pydocstyle rules are disabled by default depending on the docstring convention selected.
