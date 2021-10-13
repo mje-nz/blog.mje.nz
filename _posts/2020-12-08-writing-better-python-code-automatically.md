@@ -1,4 +1,4 @@
----
+n---
 title: Writing better Python code, automatically
 toc: true
 ---
@@ -425,7 +425,7 @@ Ideally, every function should have parameter and return type annotations.
 ```ini
 # In setup.cfg
 [mypy]
-# Don't when when an import cannot be resolved
+# Don't warn when an import cannot be resolved
 ignore_missing_imports = True
 # Check the body of every function, regardless of
 # whether it has type annotations
