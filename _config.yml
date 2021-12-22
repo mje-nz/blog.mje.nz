@@ -293,6 +293,7 @@ defaults:
       share: # true
       related: false
       toc_sticky: true
+      show_date: true
   - scope:
       path: ""
       type: pages
