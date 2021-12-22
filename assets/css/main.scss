@@ -128,3 +128,8 @@ figcaption > code,
 td > code {
   border: 1px solid $border-color;
 }
+
+// Add border around code listings
+div.highlighter-rouge {
+  border: 1px solid $border-color;
+}
